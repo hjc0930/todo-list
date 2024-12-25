@@ -17,6 +17,8 @@ func NewRouter() *gin.Engine {
 		v1.GET("ping", func(context *gin.Context) {
 			context.JSON(200, "It's work!!!")
 		})
+
+		v1.POST("user/register")
 	}
 	return ginRouter
 }
