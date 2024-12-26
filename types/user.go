@@ -1,6 +1,9 @@
 package types
 
-type UserRegisterReq struct{}
+type UserRegisterReq struct {
+	UserName string `json:"user_name" form:"user_name"`
+	Password string `json:"password" form:"password"`
+}
 
 type UserServiceReq struct {
 	UserName string `form:"user_name" json:"user_name" binding:"required,min=3,max=15" example:"FanOne"`

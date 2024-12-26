@@ -1,6 +1,11 @@
 package model
 
-import "time"
+import (
+	"time"
+	"todo-list/consts"
+
+	"golang.org/x/crypto/bcrypt"
+)
 
 type UserModel struct {
 	Id             int64      `gorm:"column:id;primary_key"`
@@ -13,4 +18,12 @@ type UserModel struct {
 
 func (*UserModel) TableName() string {
 	return "user"
+}
+
+func (user *UserModel) SetPassword(password string) error {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), consts.PasswordCost)
+
+	if err != nil {
+		return err
+	}
 }

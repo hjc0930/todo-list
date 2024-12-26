@@ -3,7 +3,11 @@ package service
 import (
 	"context"
 	"sync"
+	"todo-list/repository/db/dao"
+	"todo-list/repository/db/model"
 	"todo-list/types"
+
+	"gorm.io/gorm"
 )
 
 var UserSrvIns *UserSrv
@@ -18,7 +22,14 @@ func GetUserSrv() *UserSrv {
 	return UserSrvIns
 }
 
-func (s *UserSrv) UserRegister(c context.Context, req *types.UserRegisterReq) (resp interface{}, err error) {
+func (s *UserSrv) UserRegister(ctx context.Context, req *types.UserRegisterReq) (resp interface{}, err error) {
+	userDao := dao.NewUserDao(ctx)
+	user, err := userDao.FindUserByUserName(req.UserName)
 
-	return
+	switch err {
+	case gorm.ErrRecordNotFound:
+		user = &model.UserModel{}
+	}
+	// userDao := dao.NewUserDao(ctx);
+	// return userDao
 }
