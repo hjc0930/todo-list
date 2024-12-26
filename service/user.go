@@ -2,7 +2,10 @@ package service
 
 import (
 	"context"
+	"errors"
 	"sync"
+	"todo-list/pkg/ctl"
+	"todo-list/pkg/utils"
 	"todo-list/repository/db/dao"
 	"todo-list/repository/db/model"
 	"todo-list/types"
@@ -28,8 +31,25 @@ func (s *UserSrv) UserRegister(ctx context.Context, req *types.UserRegisterReq) 
 
 	switch err {
 	case gorm.ErrRecordNotFound:
-		user = &model.UserModel{}
+		user = &model.UserModel{
+			UserName: req.UserName,
+		}
+		// Password encrypted storage
+		if err = user.SetPassword(req.Password); err != nil {
+			utils.LogrusObj.Error(err)
+			return
+		}
+
+		if err = userDao.CreateUser(user); err != nil {
+			utils.LogrusObj.Error(err)
+			return
+		}
+
+		return ctl.RespSuccess(), nil
+	case nil:
+		err = errors.New("user already exists")
+		return
+	default:
+		return
 	}
-	// userDao := dao.NewUserDao(ctx);
-	// return userDao
 }

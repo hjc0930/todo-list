@@ -1,10 +1,12 @@
 package router
 
 import (
+	"todo-list/api"
+	"todo-list/middleware"
+
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
-	"todo-list/middleware"
 )
 
 func NewRouter() *gin.Engine {
@@ -18,7 +20,7 @@ func NewRouter() *gin.Engine {
 			context.JSON(200, "It's work!!!")
 		})
 
-		v1.POST("user/register")
+		v1.POST("user/register", api.UserRegisterHandler())
 	}
 	return ginRouter
 }

@@ -2,14 +2,16 @@ package dao
 
 import (
 	"context"
+	"strings"
+	"time"
+	"todo-list/config"
+	"todo-list/repository/db/model"
+
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
-	"strings"
-	"time"
-	"todo-list/config"
 )
 
 var _db *gorm.DB
@@ -53,7 +55,7 @@ func MysqlInit() {
 	sqlDB.SetMaxOpenConns(100) // 最大打开数量
 	sqlDB.SetConnMaxLifetime(time.Second * 30)
 	_db = db
-	//migrate()
+	migrate()
 }
 
 func NewDBClient(ctx context.Context) *gorm.DB {
@@ -61,11 +63,11 @@ func NewDBClient(ctx context.Context) *gorm.DB {
 	return db.WithContext(ctx)
 }
 
-//func migrate() {
-//	err := _db.Set("gorm:table_options", "charset=utf8mb4").
-//		AutoMigrate(&model.UserModel{}, &model.TaskModel{})
-//
-//	if err != nil {
-//		panic(err)
-//	}
-//}
+func migrate() {
+	err := _db.Set("gorm:table_options", "charset=utf8mb4").
+		AutoMigrate(&model.UserModel{}, &model.TaskModel{})
+
+	if err != nil {
+		panic(err)
+	}
+}

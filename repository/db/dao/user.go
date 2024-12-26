@@ -38,6 +38,9 @@ func (dao *UserDao) FindUserByUserId(id uint) (user *model.UserModel, err error)
 // CreateUser 创建User
 func (dao *UserDao) CreateUser(user *model.UserModel) (err error) {
 	err = dao.DB.Model(&model.UserModel{}).Create(user).Error
-
 	return
+}
+
+func (s *UserDao) Update(in *model.UserModel) error {
+	return s.DB.Model(&model.UserModel{}).Updates(in).Error
 }

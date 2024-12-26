@@ -26,4 +26,12 @@ func (user *UserModel) SetPassword(password string) error {
 	if err != nil {
 		return err
 	}
+	user.PasswordDigest = string(bytes)
+
+	return nil
+}
+
+func (user *UserModel) CheckPassword(password string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(user.PasswordDigest), []byte(password))
+	return err == nil
 }
