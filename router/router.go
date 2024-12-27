@@ -14,13 +14,21 @@ func NewRouter() *gin.Engine {
 	ginRouter.Use(middleware.Cors())
 	store := cookie.NewStore([]byte("something-very-secret"))
 	ginRouter.Use(sessions.Sessions("mysession", store))
-	v1 := ginRouter.Group("")
+	router := ginRouter.Group("")
 	{
-		v1.GET("ping", func(context *gin.Context) {
+		router.GET("ping", func(context *gin.Context) {
 			context.JSON(200, "It's work!!!")
 		})
+		router.POST("user/register", api.UserRegisterHandler())
+		router.POST("user/login", api.UserLoginHandler())
 
-		v1.POST("user/register", api.UserRegisterHandler())
+		// task router
+		authed := router.Group(("/"))
+		authed.Use(middleware.Auth())
+		{
+			router.POST("task/create", api.CreateTaskHandler())
+		}
 	}
+
 	return ginRouter
 }

@@ -53,3 +53,36 @@ func (s *UserSrv) UserRegister(ctx context.Context, req *types.UserRegisterReq) 
 		return
 	}
 }
+
+func (s *UserSrv) UserLogin(ctx context.Context, req *types.UserLoginReq) (resp interface{}, err error) {
+	userDao := dao.NewUserDao(ctx)
+	user, err := userDao.FindUserByUserName(req.UserName)
+
+	if err != nil {
+		utils.LogrusObj.Error(err)
+		return
+	}
+
+	if !user.CheckPassword(req.Password) {
+		err = errors.New("your account or password is incorrect")
+		utils.LogrusObj.Error(err)
+		return
+	}
+	// Generator token
+	token, err := utils.GenerateToken(user.Id, user.UserName)
+	if err != nil {
+		utils.LogrusObj.Error(err)
+		return
+	}
+
+	userResp := types.TokenData{
+		User: types.UserRegisterResp{
+			Id:       user.Id,
+			UserName: user.UserName,
+			CreateAt: user.CreatedAt.Unix(),
+		},
+		Token: token,
+	}
+
+	return ctl.RespSuccessWithData(userResp), nil
+}
