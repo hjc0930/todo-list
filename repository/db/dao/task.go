@@ -26,64 +26,67 @@ func (s *TaskDao) CreateTask(task *model.TaskModel) error {
 }
 
 // ListTask List Task的情况
-func (s *TaskDao) ListTask(start, limit int, userId uint) (r []*model.TaskModel, total int64, err error) {
-	err = s.Model(&model.TaskModel{}).Preload("User").Where("uid = ?", userId).
-		Count(&total).
-		Limit(limit).Offset((start - 1) * limit).
-		Find(&r).Error
+func (s *TaskDao) ListTask(start, limit int, userId int64) (result []*model.TaskModel, total int64, err error) {
+	err = s.DB.Model(&model.TaskModel{}).
+		Where("uid = ?", userId).
+		Count(&total).Error
+
+	if err != nil {
+		return
+	}
+	err = s.DB.Model(&model.TaskModel{}).
+		Where("uid = ?", userId).
+		Limit(limit).
+		Offset((start - 1) * limit).
+		Find(&result).Error
 
 	return
 }
 
 // FindTaskByIdAndUserId 通过id和user_id找到task
-func (s *TaskDao) FindTaskByIdAndUserId(uId, id uint) (r *model.TaskModel, err error) {
-	err = s.Model(&model.TaskModel{}).Where("id = ? AND uid = ?", id, uId).First(&r).Error
-
+func (s *TaskDao) FindTaskByIdAndUserId(id, uId int64) (r *model.TaskModel, err error) {
+	err = s.DB.Model(&model.TaskModel{}).Where("id = ? AND uid = ?", id, uId).First(&r).Error
 	return
 }
 
 // UpdateTask 修改
-func (s *TaskDao) UpdateTask(uId uint, req *types.UpdateTaskReq) error {
-	t := new(model.TaskModel)
-	err := s.Model(&model.TaskModel{}).Where("id = ? AND uid=?", req.ID, uId).First(&t).Error
+func (s *TaskDao) UpdateTask(uId int64, req *types.UpdateTaskReq) error {
+	var task model.TaskModel
+	err := s.DB.Model(&model.TaskModel{}).
+		Where("id = ? AND uid=?", req.Id, uId).
+		First(&task).Error
+
 	if err != nil {
 		return err
 	}
-
 	if req.Status != 0 {
-		t.Status = req.Status
+		task.Status = req.Status
 	}
-
 	if req.Title != "" {
-		t.Title = req.Title
+		task.Title = req.Title
 	}
-
 	if req.Content != "" {
-		t.Content = req.Content
+		task.Content = req.Content
 	}
 
-	return s.Save(t).Error
+	return s.Save(&task).Error
 }
 
 // SearchTask 搜索Task
-func (s *TaskDao) SearchTask(uId uint, info string) (tasks []*model.TaskModel, err error) {
-
-	err = s.Where("uid=?", uId).Preload("User").First(&tasks).Error
-	if err != nil {
-		return
-	}
-
-	err = s.Model(&model.TaskModel{}).Where("title LIKE ? OR content LIKE ?",
-		"%"+info+"%", "%"+info+"%").Find(&tasks).Error
-
+func (s *TaskDao) SearchTask(uId int64, info string) (tasks []*model.TaskModel, err error) {
+	err = s.DB.Model(&model.TaskModel{}).
+		Where("uid = ? AND (title LIKE ? OR content LIKE ?)",
+			uId,
+			"%"+info+"%", "%"+info+"%").
+		Find(&tasks).
+		Error
 	return
 }
 
 // DeleteTaskById 通过id删除
-func (s *TaskDao) DeleteTaskById(uId, tId uint) error {
-	r, err := s.FindTaskByIdAndUserId(uId, tId)
-	if err != nil {
-		return err
-	}
-	return s.Delete(&r).Error
+func (s *TaskDao) DeleteTaskById(tId, uId int64) (err error) {
+	err = s.DB.Model(&model.TaskModel{}).
+		Where("id = ? AND uid = ?", tId, uId).
+		Delete(&model.TaskModel{}).Error
+	return err
 }

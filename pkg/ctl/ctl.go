@@ -24,6 +24,17 @@ type TrackedErrorResponse struct {
 	TraceId string `json:"trace_id"`
 }
 
+func RespList(items interface{}, total int64) Response {
+	return Response{
+		Status: errorStatus.Success,
+		Msg:    "success",
+		Data: DataList{
+			Item:  items,
+			Total: total,
+		},
+	}
+}
+
 func RespSuccess(code ...int) *Response {
 	status := errorStatus.Success
 	if code != nil {

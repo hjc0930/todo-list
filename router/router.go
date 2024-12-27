@@ -19,14 +19,19 @@ func NewRouter() *gin.Engine {
 		router.GET("ping", func(context *gin.Context) {
 			context.JSON(200, "It's work!!!")
 		})
+		// user
 		router.POST("user/register", api.UserRegisterHandler())
 		router.POST("user/login", api.UserLoginHandler())
-
 		// task router
-		authed := router.Group(("/"))
+		authed := router.Group("/task")
 		authed.Use(middleware.Auth())
 		{
-			router.POST("task/create", api.CreateTaskHandler())
+			authed.GET("/list", api.ListTaskHandler())
+			authed.GET("/details", api.DetailsTaskHandler())
+			authed.GET("/search", api.SearchTaskHandler())
+			authed.POST("", api.CreateTaskHandler())
+			authed.PUT("", api.UpdateTaskHandler())
+			authed.DELETE("", api.DeleteTaskHandler())
 		}
 	}
 
