@@ -1,6 +1,9 @@
 package com.hjc.todolist.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -15,14 +18,15 @@ public class Task {
 
     private int status;
 
-    private Byte isDeleted;
+    private int isDeleted;
 
-    private Date createTime;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    private LocalDateTime createTime;
 
     private Integer createUserId;
 
     private Integer updateUserId;
 
-    private Date updateTime;
-
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    private LocalDateTime updateTime;
 }

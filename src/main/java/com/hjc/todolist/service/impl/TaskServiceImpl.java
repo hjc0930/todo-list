@@ -5,6 +5,7 @@ import com.hjc.todolist.dao.TaskMapper;
 import com.hjc.todolist.dto.CreateTaskDto;
 import com.hjc.todolist.entity.Task;
 import com.hjc.todolist.service.TaskService;
+import com.hjc.todolist.util.BeanUtil;
 import com.hjc.todolist.util.PageQueryUtil;
 import com.hjc.todolist.util.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public PageResult<List<Task>> getTaskList(PageQueryUtil pageUtil) {
         List<Task> taskList = taskMapper.findTaskList(pageUtil);
+
         int total = taskMapper.getTotalTasks(pageUtil);
         return new PageResult(pageUtil.getPage(), pageUtil.getPageSize(), total, taskList);
     }
@@ -29,9 +31,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public int addTask(CreateTaskDto createTaskDto) {
         Task task = new Task();
-        task.setTaskName(createTaskDto.getTaskName());
-        Optional.of(createTaskDto).map(CreateTaskDto::getTaskName).ifPresent(task::setTaskName);
-        Optional.of(createTaskDto).map(CreateTaskDto::getTaskDesc).ifPresent(task::setTaskDescription);
+        BeanUtil.copyProperties(createTaskDto, task);
         task.setUserId(1L);
         task.setStatus(TaskStatusEnum.COMPLETED.getCode());
 

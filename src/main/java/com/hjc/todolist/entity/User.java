@@ -14,7 +14,13 @@ public class User {
     private Byte locked;
 
     private Integer createUserId;
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private LocalDateTime createTime;
+
     private Integer updateUserId;
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private LocalDateTime updateTime;
+
 }
