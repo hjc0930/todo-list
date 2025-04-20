@@ -3,8 +3,8 @@ package com.hjc.todolist.util;
 import org.springframework.util.StringUtils;
 
 public class ResultGenerator {
-    private static final String DEFAULT_SUCCESS_MESSAGE = "SUCCESS";
-    private static final String DEFAULT_FAIL_MESSAGE = "FAIL";
+    private static final String DEFAULT_SUCCESS_MESSAGE = "Success";
+    private static final String DEFAULT_FAIL_MESSAGE = "Fail";
     private static final int RESULT_CODE_SUCCESS = 200;
     private static final int RESULT_CODE_SERVER_ERROR = 500;
 

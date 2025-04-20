@@ -1,5 +1,6 @@
 package com.hjc.todolist.service;
 
+import com.hjc.todolist.dto.CreateTaskDto;
 import com.hjc.todolist.entity.Task;
 import com.hjc.todolist.util.PageQueryUtil;
 import com.hjc.todolist.util.PageResult;
@@ -16,11 +17,10 @@ public interface TaskService {
     /**
      * 添加任务
      *
-     * @param taskName 任务名称
-     * @param taskDesc 任务描述
+     * @param createTaskDto 任务名称
      * @return 任务ID
      */
-    Long addTask(String taskName, String taskDesc);
+    int addTask(CreateTaskDto createTaskDto);
 
     /**
      * 删除任务

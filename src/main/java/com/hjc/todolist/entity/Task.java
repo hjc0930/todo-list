@@ -1,8 +1,7 @@
 package com.hjc.todolist.entity;
 
 import lombok.Data;
-
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 public class Task {
@@ -14,16 +13,16 @@ public class Task {
 
     private Long userId;
 
-    private String status;
+    private int status;
 
     private Byte isDeleted;
 
-    private LocalDateTime createTime;
+    private Date createTime;
 
     private Integer createUserId;
 
     private Integer updateUserId;
 
-    private LocalDateTime updateTime;
+    private Date updateTime;
 
 }
