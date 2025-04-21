@@ -1,13 +1,15 @@
 package com.hjc.todolist.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Data
 public class Task {
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long taskId;
 
     private String taskName;
