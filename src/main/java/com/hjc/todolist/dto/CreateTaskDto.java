@@ -17,7 +17,7 @@ public class CreateTaskDto {
 
     private int isDeleted;
 
-    private LocalDateTime createTime;
+    private Date createTime;
 
     private Integer createUserId;
 

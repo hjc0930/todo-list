@@ -21,12 +21,12 @@ public class Task {
     private int isDeleted;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    private LocalDateTime createTime;
+    private Date createTime;
 
     private Integer createUserId;
 
     private Integer updateUserId;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    private LocalDateTime updateTime;
+    private Date updateTime;
 }
