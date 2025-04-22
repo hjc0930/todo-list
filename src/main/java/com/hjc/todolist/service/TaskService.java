@@ -4,6 +4,7 @@ import com.hjc.todolist.dto.CreateTaskDto;
 import com.hjc.todolist.entity.Task;
 import com.hjc.todolist.util.PageQueryUtil;
 import com.hjc.todolist.util.PageResult;
+import com.hjc.todolist.vo.TaskListVo;
 
 public interface TaskService {
 
@@ -13,7 +14,7 @@ public interface TaskService {
      * @param pageUtil 分页工具类
      * @return 任务列表
      */
-    PageResult getTaskList(PageQueryUtil pageUtil);
+    PageResult<TaskListVo> getTaskList(PageQueryUtil pageUtil);
     /**
      * 添加任务
      *

@@ -7,6 +7,7 @@ import com.hjc.todolist.util.PageQueryUtil;
 import com.hjc.todolist.util.PageResult;
 import com.hjc.todolist.util.Result;
 import com.hjc.todolist.util.ResultGenerator;
+import com.hjc.todolist.vo.TaskListVo;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class TaskController {
     private TaskService taskService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public Result<PageResult<List<Task>>> getTaskList(
+    public Result<PageResult<TaskListVo>> getTaskList(
             @RequestParam(required = false, defaultValue = "1") Integer page,
             @RequestParam(required = false, defaultValue = "10") Integer pageSize
     ) {
@@ -30,7 +31,7 @@ public class TaskController {
         map.put("pageSize", pageSize);
         PageQueryUtil pageQueryUtil = new PageQueryUtil(map);
 
-        PageResult taskList = taskService.getTaskList(pageQueryUtil);
+        PageResult<TaskListVo> taskList = taskService.getTaskList(pageQueryUtil);
         return ResultGenerator.getSuccessResult(taskList);
     }
 

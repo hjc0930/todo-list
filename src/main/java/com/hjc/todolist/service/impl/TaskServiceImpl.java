@@ -2,32 +2,56 @@ package com.hjc.todolist.service.impl;
 
 import com.hjc.todolist.common.TaskStatusEnum;
 import com.hjc.todolist.dao.TaskMapper;
+import com.hjc.todolist.dao.UserMapper;
 import com.hjc.todolist.dto.CreateTaskDto;
 import com.hjc.todolist.entity.Task;
+import com.hjc.todolist.entity.User;
 import com.hjc.todolist.service.TaskService;
 import com.hjc.todolist.util.BeanUtil;
 import com.hjc.todolist.util.PageQueryUtil;
 import com.hjc.todolist.util.PageResult;
+import com.hjc.todolist.vo.TaskListVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TaskServiceImpl implements TaskService {
 
     @Autowired
     private TaskMapper taskMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
-    public PageResult<List<Task>> getTaskList(PageQueryUtil pageUtil) {
+    public PageResult<TaskListVo> getTaskList(PageQueryUtil pageUtil) {
         List<Task> taskList = taskMapper.findTaskList(pageUtil);
-
+        List<Long> taskUserIds = taskList.stream().map(Task::getUserId).toList();
+        List<User> userList = userMapper.findUserByIds(taskUserIds);
         int total = taskMapper.getTotalTasks(pageUtil);
-        return new PageResult(pageUtil.getPage(), pageUtil.getPageSize(), total, taskList);
+
+        ArrayList<TaskListVo> taskVoList = new ArrayList<>();
+        taskList.forEach(task -> {
+            TaskListVo taskListVo = new TaskListVo();
+            BeanUtil.copyProperties(task, taskListVo);
+
+            userList.stream()
+                    .filter(u -> u.getUserId().equals(task.getUserId()))
+                    .findFirst()
+                    .map(User::getUserName)
+                    .ifPresent(taskListVo::setUserName);
+            taskVoList.add(taskListVo);
+        });
+
+        PageResult<TaskListVo> pageResult = new PageResult<>();
+        pageResult.setPage(pageUtil.getPage());
+        pageResult.setPageSize(pageUtil.getPageSize());
+        pageResult.setTotalCount(total);
+        pageResult.setList(taskVoList);
+
+        return pageResult;
     }
 
     @Override

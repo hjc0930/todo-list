@@ -29,6 +29,15 @@
         from tb_todo_list_user
         where user_id = #{userId,jdbcType=BIGINT}
     </select>
+    <select id="findUserByIds" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from tb_todo_list_user
+        where user_id in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item,jdbcType=BIGINT}
+        </foreach>
+    </select>
     <insert id="insert" parameterType="com.hjc.todolist.entity.User">
         insert into tb_todo_list_user (user_id, login_user_name, login_password, phone_number, locked, create_time, create_user_id, update_time, update_user_id)
         values (#{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR}, #{locked,jdbcType=TINYINT},
