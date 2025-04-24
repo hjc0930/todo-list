@@ -4,7 +4,7 @@ import com.hjc.todolist.dto.CreateTaskDto;
 import com.hjc.todolist.entity.Task;
 import com.hjc.todolist.util.PageQueryUtil;
 import com.hjc.todolist.util.PageResult;
-import com.hjc.todolist.vo.TaskListVo;
+import com.hjc.todolist.dto.vo.TaskListVo;
 
 public interface TaskService {
 

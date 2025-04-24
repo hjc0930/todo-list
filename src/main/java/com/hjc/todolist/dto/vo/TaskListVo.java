@@ -1,4 +1,4 @@
-package com.hjc.todolist.vo;
+package com.hjc.todolist.dto.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

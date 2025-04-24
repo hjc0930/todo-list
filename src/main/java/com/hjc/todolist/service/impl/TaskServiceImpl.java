@@ -10,7 +10,7 @@ import com.hjc.todolist.service.TaskService;
 import com.hjc.todolist.util.BeanUtil;
 import com.hjc.todolist.util.PageQueryUtil;
 import com.hjc.todolist.util.PageResult;
-import com.hjc.todolist.vo.TaskListVo;
+import com.hjc.todolist.dto.vo.TaskListVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +29,7 @@ public class TaskServiceImpl implements TaskService {
     public PageResult<TaskListVo> getTaskList(PageQueryUtil pageUtil) {
         List<Task> taskList = taskMapper.findTaskList(pageUtil);
         List<Long> taskUserIds = taskList.stream().map(Task::getUserId).toList();
-        List<User> userList = userMapper.findUserByIds(taskUserIds);
+        List<User> userList = userMapper.findAllById(taskUserIds);
         int total = taskMapper.getTotalTasks(pageUtil);
 
         ArrayList<TaskListVo> taskVoList = new ArrayList<>();

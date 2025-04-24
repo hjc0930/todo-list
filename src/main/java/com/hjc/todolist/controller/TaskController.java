@@ -1,19 +1,17 @@
 package com.hjc.todolist.controller;
 
 import com.hjc.todolist.dto.CreateTaskDto;
-import com.hjc.todolist.entity.Task;
 import com.hjc.todolist.service.TaskService;
 import com.hjc.todolist.util.PageQueryUtil;
 import com.hjc.todolist.util.PageResult;
 import com.hjc.todolist.util.Result;
 import com.hjc.todolist.util.ResultGenerator;
-import com.hjc.todolist.vo.TaskListVo;
+import com.hjc.todolist.dto.vo.TaskListVo;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 
 @RestController
 @RequestMapping("/task")

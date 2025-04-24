@@ -18,7 +18,7 @@ public interface UserMapper {
      */
     User login(@Param("userName") String userName, @Param("userName") String password);
     User findUserById(@Param("userId") Long userId);
-    List<User> findUserByIds(List<Long> userIds);
+    List<User> findAllById(List<Long> userIds);
     void updateByPrimaryKey(User user);
     void  updateByPrimaryKeySelective(User user);
 }
