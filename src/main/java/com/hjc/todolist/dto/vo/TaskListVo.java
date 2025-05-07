@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 public class TaskListVo {
@@ -22,13 +23,11 @@ public class TaskListVo {
 
     private int isDeleted;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    private LocalDateTime createTime;
+    private OffsetDateTime createTime;
 
     private Integer createUserId;
 
     private Integer updateUserId;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    private LocalDateTime updateTime;
+    private OffsetDateTime updateTime;
 }

@@ -14,6 +14,7 @@ import com.hjc.todolist.dto.vo.TaskListVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,10 +39,12 @@ public class TaskServiceImpl implements TaskService {
             BeanUtil.copyProperties(task, taskListVo);
 
             userList.stream()
-                    .filter(u -> u.getUserId().equals(task.getUserId()))
+                    .filter(user -> user.getUserId().equals(task.getUserId()))
                     .findFirst()
                     .map(User::getUserName)
                     .ifPresent(taskListVo::setUserName);
+            taskListVo.setCreateTime(task.getCreateTime().atOffset(ZoneOffset.UTC));
+            taskListVo.setUpdateTime(task.getUpdateTime().atOffset(ZoneOffset.UTC));
             taskVoList.add(taskListVo);
         });
 
