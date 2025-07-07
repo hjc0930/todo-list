@@ -6,14 +6,16 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
 } from '@nestjs/common';
 import { UserAuthsService } from './user-auths.service';
 import { CreateUserAuthDto } from './dto/create-user-auth.dto';
 import { UpdateUserAuthDto } from './dto/update-user-auth.dto';
+import { Request } from 'express';
 
 @Controller('user-auths')
 export class UserAuthsController {
-  constructor(private readonly userAuthsService: UserAuthsService) {}
+  constructor(private readonly userAuthsService: UserAuthsService) { }
 
   @Post()
   create(@Body() createUserAuthDto: CreateUserAuthDto) {
@@ -39,7 +41,9 @@ export class UserAuthsController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: string, @Req() request: Request) {
+    const userInfo = request.get("user");
+
     return this.userAuthsService.remove(+id);
   }
 }
