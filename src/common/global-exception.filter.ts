@@ -1,49 +1,23 @@
-import {
-  ArgumentsHost,
-  ExceptionFilter,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
-import { Catch } from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { BusinessException } from './business.expection';
-import { BusinessStatusEnum } from './business-status-enum';
 
-@Catch()
+@Catch(HttpException)
 export class GlobalExceptionFilter implements ExceptionFilter {
-  catch(exception: unknown, host: ArgumentsHost) {
-    const ctx = host.switchToHttp();
+  catch(exception: HttpException, host: ArgumentsHost) {
+    const http = host.switchToHttp();
+    const request = http.getRequest<Request>();
+    const response = http.getResponse<Response>();
 
-    const request = ctx.getRequest<Request>();
-    const response = ctx.getResponse<Response>();
+    const statusCode = exception.getStatus();
 
-    let status: number, message: string, errorCode: string;
+    const res = exception.getResponse() as { message: string[] };
 
-    if (exception instanceof BusinessException) {
-      status = exception.getStatus();
-      message = exception.message;
-      errorCode = exception.errorCode;
-    } else if (exception instanceof HttpException) {
-      // 处理内置HTTP异常
-      status = exception.getStatus();
-      message = exception.message;
-      errorCode = status.toString(); // 默认用HTTP状态码作为错误码
-    } else {
-      // 处理未知错误
-      status = HttpStatus.INTERNAL_SERVER_ERROR;
-      message = BusinessStatusEnum.SYSTEM_ERROR.getMsg();
-      errorCode = BusinessStatusEnum.SYSTEM_ERROR.getCode();
-    }
-
-    // 记录日志（生产环境需接入ELK/Sentry）
-    console.error(`[${request.method}] ${request.url} - ${message}`);
-
-    response.status(status).json({
-      statusCode: status,
-      errorCode,
-      message,
+    response.status(statusCode).json({
+      statusCode,
+      message: Array.isArray(res?.message) ? res?.message : exception.message,
       path: request.url,
       timestamp: new Date().toISOString(),
-    });
+    })
   }
 }
+

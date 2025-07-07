@@ -40,16 +40,13 @@ export class AuthService {
     const { identityType } = loginDto;
     switch (identityType) {
       case IdentityTypeEnum.EMAIL: {
-        await this.loginForEmail(loginDto);
-        break;
+        return await this.loginForEmail(loginDto);
       }
       case IdentityTypeEnum.PHONE: {
-        await this.loginForPhone(loginDto);
-        break;
+        return await this.loginForPhone(loginDto);
       }
       case IdentityTypeEnum.WEICHAT: {
-        await this.loginForWeiChat(loginDto);
-        break;
+        return await this.loginForWeiChat(loginDto);
       }
     }
     return 'Login successful';

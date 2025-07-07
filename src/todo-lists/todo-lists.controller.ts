@@ -5,7 +5,7 @@ import { UpdateTodoListDto } from './dto/update-todo-list.dto';
 
 @Controller('todo-lists')
 export class TodoListsController {
-  constructor(private readonly todoListsService: TodoListsService) {}
+  constructor(private readonly todoListsService: TodoListsService) { }
 
   @Post()
   create(@Body() createTodoListDto: CreateTodoListDto) {
@@ -14,7 +14,7 @@ export class TodoListsController {
 
   @Get()
   findAll() {
-    return this.todoListsService.findAll();
+    return "This method is not implemented yet";
   }
 
   @Get(':id')
